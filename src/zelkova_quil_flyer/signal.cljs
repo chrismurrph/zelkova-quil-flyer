@@ -34,18 +34,26 @@
         angle     (v/vector->radians diff)]
     (assoc-in state [:flyer :angle] angle)))
 
+(defn my-stream
+      []
+      (z/constant [10,10]))
+
 (defn app-signal
   [init-state]
   (let [time-deltas (time/fps 30)
         inputs      (->> (z/map vector
                                 time-deltas
                                 keyboard/space
-                                mouse/position)
+                                ;mouse/position
+                                )
                          (z/sample-on time-deltas))]
-    (z/reductions (fn [state [time-delta spacebar? mouse-pos]]
+    (z/reductions (fn [state [time-delta spacebar?          ;mouse-pos
+                              ]]
                     (-> state
                         (inertia time-delta)
                         (acceleration spacebar?)
-                        (steering mouse-pos)))
+                        ;(steering mouse-pos)
+                        )
+                    )
                   init-state
                   inputs)))
